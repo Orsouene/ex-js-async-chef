@@ -20,7 +20,7 @@ async function getChefBirthday(id) {
     console.error(error);
     throw new Error("nessun chief trovato");
   }
-  const ChiefBirthday = BirthdayDate.birthDate;
+  const ChiefBirthday = dayjs(BirthdayDate.birthDate).format("DD/MM/YYYY");
   return ChiefBirthday;
 }
 
