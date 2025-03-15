@@ -1,14 +1,27 @@
 async function getChefBirthday(id) {
+  let recipRes;
   try {
-    const Reciep = await fetch(` https://dummyjson.com/recipes/${id}`);
-    const recipRes = await Reciep.json();
-    const chief = await fetch(`https://dummyjson.com/users/${recipRes.userId}`);
-    const BirthdayDate = await chief.json();
-    const ChiefBirthday = BirthdayDate.birthDate;
-    return ChiefBirthday;
-  } catch {
-    throw new Error("No chef found ");
+    const ricetta = await fetch(` https://dummyjson.com/recipes/${id}`);
+    // const ricetta = await fetch(` https://dummyjson.com/recipes/${58454}`); // !<= error Test bonus 1
+
+    recipRes = await ricetta.json();
+  } catch (error) {
+    console.error(error);
+    throw new Error("nessun ricetta trovata");
   }
+  if (recipRes.message) {
+    throw new Error(recipRes.message);
+  }
+  let BirthdayDate;
+  try {
+    const chief = await fetch(`https://dummyjson.com/users/${recipRes.userId}`);
+    BirthdayDate = await chief.json();
+  } catch (error) {
+    console.error(error);
+    throw new Error("nessun chief trovato");
+  }
+  const ChiefBirthday = BirthdayDate.birthDate;
+  return ChiefBirthday;
 }
 
 (async () => {
